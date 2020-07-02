@@ -24,6 +24,7 @@ module.exports = merge(common, {
 	plugins: [
 		new webpack.DefinePlugin({ // DefinePlugin可以在编译时期创建全局变量。
 			'process.env': dev
-		})
+		}),
+		new webpack.HotModuleReplacementPlugin(), // 热更新插件
 	]
 })

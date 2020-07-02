@@ -1,6 +1,6 @@
 <template lang="html">
-  <div id="root">
-    <router-view />
+  <div class="test">
+    test
   </div>
 </template>
 
@@ -10,4 +10,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.test{
+  color: red;
+}
 </style>

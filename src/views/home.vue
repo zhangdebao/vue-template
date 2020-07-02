@@ -1,13 +1,21 @@
 <template lang="html">
   <div>
-    ssss
+    <span>HOme</span>
+    <Test />
   </div>
 </template>
 
 <script>
+import Test from './test.vue'
 export default {
+  components: {
+    Test
+  }
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+div{
+  color: blueviolet;
+}
 </style>
