@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "strict": true,
+    "target": "es5", // 与 Vue 的浏览器支持保持一致
+    "module": "esnext", 
+    "strict": true, // 这可以对 `this` 上的数据 property 进行更严格的推断
     "jsx": "preserve",
     "importHelpers": true,
     "moduleResolution": "node",

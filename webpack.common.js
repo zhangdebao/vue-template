@@ -13,8 +13,9 @@ module.exports = {
 	},
 	resolve: {
 		alias: {
-			'@': path.resolve(__dirname, 'src/')
-		}
+			'@': path.resolve(__dirname, 'src/'),
+		},
+		extensions: ['.js', '.ts', '.vue']
 	},
 	module: {
 		rules: [
@@ -24,7 +25,11 @@ module.exports = {
 			},
 			{
 				test: /\.ts$/,
-				use: 'ts-loader'
+				loader: 'ts-loader',
+				exclude: /node_modules/,
+				options: {
+					appendTsSuffixTo: [/\.vue$/]
+				}
 			},
 			{
         test: /\.(sa|sc|c)ss$/,

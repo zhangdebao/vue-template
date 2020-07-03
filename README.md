@@ -11,7 +11,15 @@ npm install eslint --save-dev
 ```
 eslint官方提供了3种预安装包, 使用[eslint-config-standard](https://www.npmjs.com/package/eslint-config-standard)
 ```
-npm install --save-dev eslint eslint-config-standard eslint-plugin-standard eslint-plugin-promise eslint-plugin-import eslint-plugin-node eslint-plugin-html eslint-friendly-formatter babel-eslint
+npm install eslint-config-standard eslint-plugin-standard eslint-plugin-import eslint-plugin-node eslint-plugin-promise eslint-plugin-vue -D
+```
+支持vue
+```
+npm install eslint-plugin-vue -D
+```
+支持ts
+```
+npm install typescript @typescript-eslint/eslint-plugin eslint-plugin-vue@latest @typescript-eslint/eslint-plugin@latest @typescript-eslint/parser@latest -D
 ```
 初始化eslint文件
 ```
@@ -27,11 +35,6 @@ module.exports = {
     },
     "extends": "standard"
 };
-```
-##### 1.2 CSS规范[stylelint](https://www.npmjs.com/package/stylelint)
-安装
-```
-npm i stylelint
 ```
 ## 2、安装[webpack](https://www.npmjs.com/package/webpack)与[webpack-cli](https://www.npmjs.com/package/webpack-cli)
  因为webpack4.x版本之后 webpack模块一部分功能分到webpack.cli模块， 所以两者都需要安装,具体命令如下
@@ -222,6 +225,7 @@ module.exports = {
   }
 }
 ```
+
 在src文件夹下新建css文件夹，在css文件夹下新建index.css文件
 并且在index.js中引入
 ```
@@ -344,7 +348,8 @@ module.exports = {
   </body>
 </html>
 ```
->webpack.config.js中我们引入了HtmlWebpackPlugin插件，并配置了引用了我们设置的模板，如下：
+
+webpack.config.js中我们引入了HtmlWebpackPlugin插件，并配置了引用了我们设置的模板，如下：
 ```
 // webpack.config.js
 const path = require('path') // 路径处理模块
@@ -573,11 +578,11 @@ module.exports = {
 ```
 然后我们运行npm run dev后css样式中会自动添加前缀
 
-2. 分离css插件[extract-text-webpack-plugin](https://www.npmjs.com/package/extract-text-webpack-plugin)
+2. 分离css插件[mini-css-extract-plugin](https://www.npmjs.com/package/mini-css-extract-plugin)
 
 >虽然webpack的理念是把css、js全都打包到一个文件里，但要是我们想把css分离出来该怎么做呢？
 ```
-npm i extract-text-webpack-plugin@next -D  // 加上@next是为了安装最新的，否则会出错
+npm i mini-css-extract-plugin -D 
 ```
 >安装完以上插件后在webpack.common.js文件中引入并使用该插件：
 ```
@@ -595,21 +600,28 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/, // 正则匹配以.css结尾的文件
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            { loader: 'css-loader' },
-            { loader: 'postcss-loader' }// 使用postcss-loader
-          ] // 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的
-        })
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+				options: {
+				publicPath: '../'
+            }
+          },
+          'css-loader',
+          'postcss-loader',
+          'sass-loader'
+        ]
       },
       ...
     ]
   },
   plugins: [
     ...
-    new ExtractTextPlugin('css/index.css') // 将css分离到/dist文件夹下的css文件夹中的index.css
+    new MiniCssExtractPlugin({
+		filename: devMode ? '[name].css' : '[name].[hash].css',
+		chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+	}) // 将css分离到/dist文件夹下的css文件夹中的[name].css
   ]
 }
 ```
@@ -811,133 +823,7 @@ module.exports = {
 }
 ```
 
-#### 7.5 引入[vue](https://cn.vuejs.org/)
->引入vue.js
-```
-npm install vue --S
-```
-使用vue-loader处理.vue后缀的文件
-安装[vue-loader](https://www.npmjs.com/package/vue-loader)
-```
-npm install vue-loader --S
-```
-使用vue-loader
-```
-// webpack.common.js
-...
-module.exports = {
-  ...
-  module: {
-    rules: [
-      {
-        test: /\.vue$/,
-        use: 'vue-loader'
-      },
-      ...
-        ]
-      }
-    ]
-  },
-  ...
-}
-```
-
->引入vuex, 对全局状态进行管理
-```
-npm install vuex -S
-```
->在preset文件夹下创建store.js
-
-```
-import Vue from 'vue'
-import Vuex from 'vuex'
-import { get, post } from './request.js'
-Vue.use(Vuex)
-const store = new Vuex.Store({
-  state: {
-    token: null
-  },
-  // 突变
-  mutations: {
-    HTMLTOWORD (state) {
-    }
-  },
-  // 分发的action
-  actions: {
-    HTMLTOWORD ({ commit }, data) {
-      return post({
-        url: '/htmlTransformWord',
-        data
-      })
-    }
-  }
-
-})
-export default store
-```
-
-在main.js中引入store
-```
-// main.js
-...
-import store from '@/preset/store.js'
-new Vue({
-  el: '#root',
-  router,
-  store,
-  render: h => h(App)
-})
-```
-在index.vue文件下， 分发的action
-```
-...
-downloadWord () {
-  const html = this.getCanvasHTML()
-  const promise = this.$store.dispatch('HTMLTOWORD', {
-    html: this.getCanvasHTML()
-  })
-  promise.then(res => {
-    console.log('res')
-  })
-},
-...
-```
-
->配置VueLoaderPlugin
-```
-// webpack.common.js
-...
-const VueLoaderPlugin = require('vue-loader/lib/plugin') // vue-loader插件
-module.exports = {
-  ...
-  plugins: [
-  ...
-    new VueLoaderPlugin()
-  ]
-}
-```
->预编译[vue-template-compiler](https://www.npmjs.com/package/vue-template-compiler) 将.vue编译成render渲染函数
-```
-npm install vue-template-compiler --S
-```
-
-### 7.6 定义别名@
-```
-// webpack.common.js
-...
-module.exports = {
-  ...
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src/')
-    }
-  },
-  ...
-}
-
-```
-
-#### 7.7 压缩代码
+#### 7.5 压缩代码
 在webpack4.x版本中当你打包时会自动把js压缩了，而且npm run dev运行服务器时，当你修改代码时，热更新很慢，这是因为你修改后webpack又自动为你打包，这就导致了在开发环境中效率很慢，所以我们需要把开发环境和生产环境区分开来，这时就体现出我们代码分离的便捷性了，webpack.dev.js代表开发环境的配置，webpack.prod.js代表生产环境的配置，这时我们只要在package.json文件中配置对应环境的命令即可：
 ```
 {
@@ -950,9 +836,27 @@ module.exports = {
   ...
 }
 ```
-
 >
 --mode production表示打包时是生产环境，会自己将js进行压缩，而--mode development表示当前是开发环境，不需要进行压缩。这同时也解决了之前一直遗留的警告问题
+
+使用[terser-webpack-plugin](https://www.npmjs.com/package/terser-webpack-plugin)插件
+
+```
+// webpack.prod.js
+...
+const TerserPlugin = require('terser-webpack-plugin')   // 代码压缩
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin') // CSS 代码压缩
+module.exports = merge(common, { // 将webpackç.common.js合并到当前文件
+...
+optimization: {
+	minimizer: [
+	    new TerserPlugin(),
+	    new OptimizeCSSAssetsPlugin()
+	]
+  },
+  ...
+})
+```
 
 ## 8 根据运行环境变换对应的IP
 
@@ -1080,6 +984,110 @@ promise.then(res => {
 运行npm run build:dev，这样NODE_ENV便设置成功，无需担心跨平台问题
 在任何页面使用都能获取process.env.BRANCH
 
+## 引入typescript
+>- 创建tsconfig.json
+```
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "types": [
+      "webpack-env",
+      "jest"
+    ],
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+```
+>- 安装[ts-loader](https://www.npmjs.com/package/ts-loader#appendtssuffixto)
+```
+npm install ts-loader -D
+```
+
+```
+// webpack.common.js
+...
+{
+	test: /\.ts$/,
+	use: 'ts-loader'
+}
+...
+```
+>- 创建声明文件shime-vue.d.ts
+```
+declare module '*.vue' { 
+  import Vue from 'vue'
+  export default Vue
+}
+```
+vue支持ts
+安装[vue-class-component](https://www.npmjs.com/package/vue-class-component) [vue-property-decorator](https://www.npmjs.com/package/vue-property-decorator)
+
+更新ts-loader配置
+```
+...
+{
+    test: /\.ts$/,
+	loader: 'ts-loader',
+	exclude: /node_modules/,
+	options: {
+	    appendTsSuffixTo: [/\.vue$/]
+	}
+}
+...
+```
+
+编写XXX.vue文件例如
+```
+<template lang="html">
+  <div id="root">
+    <router-view />
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+import { Component } from 'vue-property-decorator'
+@Component
+export default class App extends Vue {
+}
+</script>
+
+<style lang="scss" scoped>
+</style>
+
+```
+
+
 #### 8.2 安装 [Axios](https://www.npmjs.com/package/axios)
 >Axios具有以下特征：
 >- 从浏览器中创建 XMLHttpRequests
@@ -1101,7 +1109,6 @@ const axios = _axios.create({ // 创建实例
   timeout: 5000 // 请求超时时间
 })
 // 配置默认值
-// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 /**
  * [description]
@@ -1154,96 +1161,4 @@ module.exports._delete = function ({ url = '', data = {}, params = {}, headers =
   const promise = axios.delete(url, { data, params, headers, timeout })
   return promise
 }
-```
-#### 9 重新定义src
->- 1 清空src
->- 2 添加main.js
-
-```
-// main.js
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Vuex from 'vuex'
-import { router } from '@/preset/router.js'
-import App from '@/App.vue'
-Vue.use(VueRouter)
-Vue.use(Vuex)
-new Vue({
-  el: '#root',
-  router,
-  render: h => h(App)
-})
-
-```
-
-### 代码规范与规范校验
-全局安装commitlint
-```
-npm install -g @commitlint/config-conventional @commitlint/cli
-```
-
->Commit message格式  
-type: subject
-
->注意冒号后面有空格。type 用于说明 commit 的类别，只允许使用下面7个标识。
-> - feat：新功能（feature）
-> - fix：修补bug
-> - docs：文档（documentation）
-> - style： 格式（不影响代码运行的变动）
-> - refactor：重构（即不是新增功能，也不是修改bug的代码变动）
-> - test：增加测试
-> - chore：构建过程或辅助工具的变动
-如果type为feat和fix，则该 commit 将肯定出现在 Change log 之中。
-
-2、根目录下新建配置文件commitlint.config.js
-```
-module.exports = {
-  extends: ['@commitlint/config-conventional']
-}
-```
-3、配合Husky
-```
-npm install husky --save-dev
-npm audit fix
-```
-4、在package.json中配置Husky
-```
-"husky": {
-  "hooks": {
-    "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
-  }
-}
-```
-
-5、配置提交之前检查eslint
-```
-"husky": {
-  "hooks": {
-    "pre-commit": "eslint \"src/**/*.{js,ts,vue}\""
-  }
-
-}
-```
-## 引入typescript
->新建tsconfig.json
-
-
-
-## Vue组件自动化测试---UI测试框架storybook
->######  全局安装
-```
-npm i -g @storybook/cli
-```
->###### 根路径下，初始化storiesbook初始化
-```
-npx -p @storybook/cli sb init
-npm install --save core-js@2
-npm install --save core-js@3
-```
->###### 项目目录下获取 Storybook
-
-```
-getstorybook
-
-npm run storebook
 ```
