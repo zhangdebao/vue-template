@@ -15,7 +15,7 @@ module.exports = {
 		alias: {
 			'@': path.resolve(__dirname, 'src/'),
 		},
-		extensions: ['.js', '.ts', '.vue']
+		extensions: ['.js', '.ts', '.vue', 'css', 'ttf', 'woff']
 	},
 	module: {
 		rules: [
@@ -51,6 +51,10 @@ module.exports = {
 					loader: 'babel-loader'
 				},
 				exclude: /node_modules/ // 排除匹配node_modules模块
+			},
+			{
+				test: /\.(eot|ttf|svg|woff)$/,
+				use: 'file-loader'
 			},
 			{
 				test: /\.(png|jpg|svg|gif)$/, // 正则匹配图片格式
