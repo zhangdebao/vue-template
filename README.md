@@ -1224,6 +1224,10 @@ npm audit fix
 
 }
 ```
+## 引入typescript
+>新建tsconfig.json
+
+
 
 ## Vue组件自动化测试---UI测试框架storybook
 >######  全局安装

@@ -6,7 +6,7 @@ const dev = require('./config/dev')
 module.exports = merge(common, {
 	// 本地服务器配置
 	devServer: {
-		contentBase: './', // 本地服务器所加载文件的入口
+		contentBase: './dist', // 本地服务器所加载文件的入口
 		port: '8085', // 设置端口号，如果省略，默认为8080
 		inline: true, // 设置为true，当源文件改变时会自动刷新页面
 		historyApiFallback: false, // 设置为true，所有的跳转将指向index.html
@@ -25,6 +25,7 @@ module.exports = merge(common, {
 		new webpack.DefinePlugin({ // DefinePlugin可以在编译时期创建全局变量。
 			'process.env': dev
 		}),
+		new webpack.NamedModulesPlugin(),
 		new webpack.HotModuleReplacementPlugin(), // 热更新插件
 	]
 })

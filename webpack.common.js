@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin') // 分离css
 const devMode = process.env.NODE_ENV !== 'production'
 module.exports = {
 	mode: 'development',
-	entry: path.join(__dirname, '/src/main.js'), // 入口文件
+	entry: path.join(__dirname, '/src/main.ts'), // 入口文件
 	output: {
 		path: path.join(__dirname, '/dist'), // 打包后的文件存放的地方
 		filename: 'bundle.js' // 打包后输出文件的文件名
@@ -21,6 +21,10 @@ module.exports = {
 			{
 				test: /\.vue$/,
 				use: 'vue-loader'
+			},
+			{
+				test: /\.ts$/,
+				use: 'ts-loader'
 			},
 			{
         test: /\.(sa|sc|c)ss$/,

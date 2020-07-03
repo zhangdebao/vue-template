@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <span>HOme</span>
+    <span>HOme111</span>
     <Test />
   </div>
 </template>
