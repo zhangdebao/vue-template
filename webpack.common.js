@@ -1,8 +1,9 @@
 // webpack.common.js
 const path = require('path') // 路径处理模块
-const webpack = require('webpack') // 这个插件不需要安装，是基于webpack的，需要引入webpack模块
 const HtmlWebpackPlugin = require('html-webpack-plugin') // 引入HtmlWebpackPlugin插件
 const VueLoaderPlugin = require('vue-loader/lib/plugin') // vue-loader插件
+const MiniCssExtractPlugin = require('mini-css-extract-plugin') // 分离css
+const devMode = process.env.NODE_ENV !== 'production'
 module.exports = {
 	mode: 'development',
 	entry: path.join(__dirname, '/src/main.js'), // 入口文件
@@ -21,28 +22,24 @@ module.exports = {
 				test: /\.vue$/,
 				use: 'vue-loader'
 			},
-			// {
-			// 	test: /\.css$/, // 正则匹配以.css结尾的文件
-			// 	use: ExtractTextPlugin.extract({ // 这里我们需要调用分离插件内的extract方法
-			// 		fallback: 'style-loader', // 相当于回滚，经postcss-loader和css-loader处理过的css最终再经过style-loader处理
-			// 		use: [
-			// 			{ loader: 'css-loader' },
-			// 			{ loader: 'postcss-loader' }// 使用postcss-loader
-			// 		], // 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的
-			// 		publicPath: '../' // 给背景图片设置一个功能路径
-			// 	})
-			// },
 			{
-				test: /\.(scss|sass)$/, // 正则匹配以.scss和.sass结尾的文件;
-				use: ['style-loader', 'css-loader', 'sass-loader'] // 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的
-			},
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+						options: {
+							publicPath: '../'
+            }
+          },
+          'css-loader',
+          'postcss-loader',
+          'sass-loader'
+        ]
+      },
 			{
 				test: /\.(js|jsx)$/,
 				use: { // 注意use选择如果有多项配置，可写成这种对象形式
 					loader: 'babel-loader'
-					// options: { // 后续Babel配置会单独提取到.babelrc文件中
-					//   presets: [ 'env' ] // 支持最新JS语法(ES6、ES7、ES8。。。)
-					// }
 				},
 				exclude: /node_modules/ // 排除匹配node_modules模块
 			},
@@ -62,9 +59,13 @@ module.exports = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: path.join(__dirname, '/index.html') // new一个这个插件的实例，并传入相关的参数
+			template: path.join(__dirname, '/index.html'), // new一个这个插件的实例，并传入相关的参数
+			title: '模版'
 		}),
-		new webpack.HotModuleReplacementPlugin(), // 热更新插件
+		new MiniCssExtractPlugin({
+			filename: devMode ? '[name].css' : '[name].[hash].css',
+			chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+		}),
 		new VueLoaderPlugin()
 	]
 }
