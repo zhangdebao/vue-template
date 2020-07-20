@@ -12,9 +12,7 @@
     "dev:dev": "cross-env BRANCH=dev webpack-dev-server --open --config webpack.dev.js --mode=development",
     "dev:uat": "cross-env BRANCH=uat webpack-dev-server --open --config webpack.dev.js --mode=development",
     "dev:prod": "cross-env BRANCH=prod webpack-dev-server --open --config webpack.dev.js --mode=development",
-    "test": "npm run test",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "test": "npm run test"
   },
   "author": "",
   "license": "ISC",
