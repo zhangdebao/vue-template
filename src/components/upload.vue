@@ -11,11 +11,16 @@
 </template>
 
 <script lang="ts">
+import { Upload } from 'element-ui'
 import Request from '../utils/request'
 import Vue from 'vue'
 import { Component, Prop, Emit, Model } from 'vue-property-decorator'
-@Component
-export default class Upload extends Vue {
+@Component({
+  components: {
+    'el-upload': Upload
+  }
+})
+export default class UploadFile extends Vue {
   @Prop({
     default: 160
   }) private width!: number

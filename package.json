@@ -19,11 +19,13 @@
       "^@/(.*)$": "<rootDir>/src/$1"
     },
     "moduleFileExtensions": [
+      "ts",
       "js",
       "json",
       "vue"
     ],
     "transform": {
+      "^.+\\.tsx?$": "ts-jest",
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
       ".*\\.(vue)$": "vue-jest"
     },
@@ -34,7 +36,8 @@
     ],
     "transformIgnorePatterns": [
       "<rootDir>/node_modules/(?!(element-ui/lib/theme-chalk))"
-    ]
+    ],
+    "testRegex": "(/test/unit/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$"
   },
   "author": "",
   "license": "ISC",
@@ -75,6 +78,7 @@
     "sass-loader": "^8.0.2",
     "style-loader": "^1.2.1",
     "terser-webpack-plugin": "^3.0.6",
+    "ts-jest": "^26.1.3",
     "ts-loader": "^7.0.5",
     "typescript": "^3.9.6",
     "url-loader": "^4.1.0",
