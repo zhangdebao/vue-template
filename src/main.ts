@@ -1,15 +1,16 @@
 // main.js
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-import { router } from '@/preset/router.ts'
-import App from '@/views/App.vue'
-// import 'element-ui/lib/theme-chalk/index.css'
-// import store from '@/preset/store.js'
-Vue.use(VueRouter)
+import router from './router/index'
+import store from './store/index'
+import App from './App.vue'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(ElementUI)
 /* eslint-disable */
 new Vue({
   el: '#root',
   router,
+  store,
   // store,
   render: h => h(App)
 })
