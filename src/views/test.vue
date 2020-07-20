@@ -8,7 +8,7 @@
 import { Button } from 'element-ui'
 export default {
   components: {
-    Button
+    'el-button': Button
   }
 }
 </script>
