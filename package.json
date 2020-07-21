@@ -30,10 +30,6 @@
       ".*\\.(vue)$": "vue-jest"
     },
     "collectCoverage": true,
-    "collectCoverageFrom": [
-      "src/**/*.{js, ts, vue}",
-      "!**/node_modules/**"
-    ],
     "transformIgnorePatterns": [
       "<rootDir>/node_modules/(?!(element-ui/lib/theme-chalk))"
     ],
