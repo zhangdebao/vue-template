@@ -35,7 +35,6 @@ export default class UploadFile extends Vue {
 
   @Emit('input')
   uploadFile ({ file }: { file: any }) {
-    console.log('测试触发事件 input')
     const formData = new FormData()
     formData.append('name', 'test')
     formData.append('file', file)
