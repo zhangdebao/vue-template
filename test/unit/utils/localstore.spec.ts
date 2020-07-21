@@ -1,4 +1,4 @@
-import { setLocalStore, getLocalStore, removeLocalStore, clearLocalStore } from '../../src/utils/localStore'
+import { setLocalStore, getLocalStore, removeLocalStore, clearLocalStore } from '../../../src/utils/localStore'
 describe('localStore', () => {
   const TOKEN = 'token'
   test('getLocalStore', () => {

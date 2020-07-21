@@ -1,5 +1,5 @@
-import Request from '../../src/utils/request'
-import { HOST } from '../../src/utils/config'
+import Request from '../../../src/utils/request'
+import { HOST } from '../../../src/utils/config'
 describe('Request', () => {
   test('Request 拦截器', () => {
     try {

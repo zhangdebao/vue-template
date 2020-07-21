@@ -1,4 +1,4 @@
-import { getToken, setToken, removeToken } from '../../src/utils/auth'
+import { getToken, setToken, removeToken } from '../../../src/utils/auth'
 describe('js-cookie 相关测试', () => {
   test('getToken', () => {
     expect(getToken()).toBe('')

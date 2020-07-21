@@ -54,7 +54,7 @@ error => {
     type: 'error',
     duration: 5 * 1000
   })
-  return Promise.reject(error)
+  return Promise.reject(error.message)
 }
 )
 export default service
