@@ -34,7 +34,6 @@
       "src/**/*.{js, ts, vue}",
       "!**/node_modules/**"
     ],
-    "coverageDirectory": "<rootDir>/test/unit/coverage",
     "transformIgnorePatterns": [
       "<rootDir>/node_modules/(?!(element-ui/lib/theme-chalk))"
     ],
