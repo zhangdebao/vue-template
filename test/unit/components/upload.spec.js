@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import UploadFile from '../../src/components/upload.vue'
+import UploadFile from '../../../src/components/upload.vue'
 
 describe('Component', () => {
   test('Upload上传文件测试', async () => {
