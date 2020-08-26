@@ -10,6 +10,7 @@
 // })
 // import Request from '../../../src/utils/request'
 import { HOST } from '../../../src/utils/config'
+import service from '../../../src/utils/request'
 import axios from 'axios'
 jest.mock('axios')
 describe('Request', () => {

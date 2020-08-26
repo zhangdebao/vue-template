@@ -79,7 +79,7 @@ export default class List extends mixins(formMixin, tableMixin) {
     const url = `/course/cms/type?page=${currentPage}&size=${size}`
     const promise = Request.get(url)
     promise.then((res: any) => {
-      const { code, detail: { count, list } } = res
+      const { data: { code, detail: { count, list } } } = res
       if (Object.is(code, 200)) {
         this.tableData = list
         this.total = count

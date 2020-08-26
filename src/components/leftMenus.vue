@@ -28,35 +28,31 @@ export default class LeftMenu extends Vue {
     default: false
   }) public menuOpen !: boolean
 
-  @LeftMenuStore.Action('updateMenus') public updateMenus!: Function
-  @LeftMenuStore.Action('updateActiveIndex') public updateActiveIndex!: Function
-  @LeftMenuStore.Getter('getLeftMenus') public getLeftMenus!: Array<object>
-  @LeftMenuStore.Getter('getActiveIndex') public getActiveIndex !: string
-  changeLeftMunus (_index: number) {
-    let index1 = 0
-    this.getLeftMenus.forEach((item: any, index: number) => {
-      if (Object.is(item.index, _index)) {
-        index1 = index + 1
-      }
-    })
-    const menus = Object.assign([], this.getLeftMenus).slice(0, index1)
-    this.updateMenus(menus)
-  }
-
-  goPath (menus: Array<object>, path: string, index: number) {
-    this.updateMenus(menus)
-    this.updateActiveIndex(index)
-    this.$router.push(path)
+  get getActiveIndex () {
+    const matched: Array<any> = this.$route.matched
+    return [...matched].pop().meta.index
   }
 
   get getRoutes () {
     const router: any = this.$router
     const route = router.options.routes
     /* 不使用第一层路由“/” */
-    return [
-      ...route[0].children
-    ]
-    // return this.$router.options.routes
+      return [
+        ...route[0].children.map((item: any) => {
+          item.parent = [
+            {
+              name: item.name,
+              path: item.path,
+              redirect: item.redirect,
+              meta: item.meta,
+              component: item.component,
+              children: item.children
+            }
+          ]
+          return item
+        }),
+        ...route.slice(1)
+      ]
   }
 }
 </script>

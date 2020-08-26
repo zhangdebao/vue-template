@@ -7,24 +7,30 @@ const routes: Array<any> = [
   {
     path: '/',
     name: 'Home',
-    title: '内容管理',
-    index: '1',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
+    meta: {
+      title: '内容管理',
+      index: '1',
+    },
+    component: () => import('../views/Home.vue'),
     children: [
       {
         path: 'tag',
         name: 'Tag',
-        title: '标签管理',
+        meta: {
+          title: '标签管理',
         index: '1-1',
-        component: () => import(/* webpackChunkName: "about" */ '../views/tag/index.vue'),
+        },
+        component: () => import('../views/tag/index.vue'),
         redirect: '/tag/list',
         children: [
           {
             path: 'tag',
             name: 'Tag',
-            title: '列表',
-            index: '1-1-1',
-            component: () => import(/* webpackChunkName: "about" */ '../views/tag/list.vue')
+            meta: {
+              title: '列表',
+              index: '1-1-1',
+            },
+            component: () => import('../views/tag/list.vue')
           }
         ]
       }
