@@ -17,6 +17,8 @@ import Menu from './menu.vue'
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
+import VueRouter, { RouteConfig, RouteRecord } from 'vue-router'
+import { MyRouteConfig } from '../types/RouteView'
 const LeftMenuStore = namespace('leftMenu')
 @Component({
   components: {
@@ -29,25 +31,25 @@ export default class LeftMenu extends Vue {
   }) public menuOpen !: boolean
 
   get getActiveIndex () {
-    const matched: Array<any> = this.$route.matched
-    return [...matched].pop().meta.index
+    const matched: Array<RouteRecord> = this.$route.matched
+    const item: {
+      meta: {
+        index: string
+      }
+    } | undefined = [...matched].pop()
+    return item ? item.meta.index : ''
   }
 
   get getRoutes () {
     const router: any = this.$router
     const route = router.options.routes
+    console.log('get getRoutes', router)
     /* 不使用第一层路由“/” */
       return [
-        ...route[0].children.map((item: any) => {
+        ...route[0].children.map((item: MyRouteConfig) => {
+          console.log('get getRoutes', item)
           item.parent = [
-            {
-              name: item.name,
-              path: item.path,
-              redirect: item.redirect,
-              meta: item.meta,
-              component: item.component,
-              children: item.children
-            }
+            item
           ]
           return item
         }),

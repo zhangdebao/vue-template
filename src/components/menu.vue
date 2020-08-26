@@ -17,6 +17,7 @@
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { namespace } from "vuex-class";
+import { MyRouteConfig } from '../types/RouteView'
 const LeftMenu = namespace("leftMenu");
 @Component({
   name: 'my-menu'
@@ -92,7 +93,7 @@ export default class Menu extends Vue {
     path = `${path}/${this.path}`;
     this.$router.push(path);
   }
-  getParentArray(item: any) {
+  getParentArray(item: MyRouteConfig) {
     const parent = [...this.parent];
     if (item.children) {
       parent.push(item);
