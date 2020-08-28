@@ -43,14 +43,13 @@ export default class LeftMenu extends Vue {
   get getRoutes () {
     const router: any = this.$router
     const route = router.options.routes
-    console.log('get getRoutes', router)
     /* 不使用第一层路由“/” */
       return [
         ...route[0].children.map((item: MyRouteConfig) => {
-          console.log('get getRoutes', item)
-          item.parent = [
-            item
-          ]
+          // console.log('get getRoutes', item)
+          // item.parent = [
+          //   item
+          // ]
           return item
         }),
         ...route.slice(1)

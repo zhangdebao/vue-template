@@ -8,29 +8,29 @@ const routes: Array<RouteConfig> = [
     path: '/',
     name: 'Home',
     meta: {
-      title: '内容管理',
+      title: '技术尝试',
       index: '1',
     },
     component: () => import('../views/Home.vue'),
     children: [
       {
-        path: 'tag',
-        name: 'Tag',
+        path: 'cache',
+        name: 'Cache',
         meta: {
-          title: '标签管理',
+          title: '缓存机制',
         index: '1-1',
         },
-        component: () => import('../views/tag/index.vue'),
-        redirect: '/tag/list',
+        component: () => import('../views/cache/index.vue'),
+        redirect: '/cache/consult',
         children: [
           {
-            path: 'tag',
-            name: 'Tag',
+            path: 'consult',
+            name: 'Consult',
             meta: {
-              title: '列表',
+              title: '协商缓存',
               index: '1-1-1',
             },
-            component: () => import('../views/tag/list.vue')
+            component: () => import('../views/cache/consult.vue')
           }
         ]
       }

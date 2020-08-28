@@ -67,31 +67,34 @@ export default class Menu extends Vue {
   @LeftMenu.Action("updateActiveIndex") public updateActiveIndex!: Function;
 
   goPath() {
-    const menu = {
-      path: this.path,
-      name: this.name,
-      meta: this.meta,
-      component: this.component,
-      children: this.children
-    };
-    let menus: Array<any> = [];
-    if (this.parent) {
-      menus = [...this.parent];
-    }
-    const filter = menus.filter(item => {
-      return Object.is(item.meta.index, menu.meta.index);
-    });
-    if (filter.length === 0) {
-      menus.push(menu);
-    }
-    let path = "";
-    if (menus.length > 1) {
-      this.parent.forEach((item: any) => {
-        path = `${path}/${item.path}`;
-      });
-    }
-    path = `${path}/${this.path}`;
-    this.$router.push(path);
+    this.$router.push({
+      path: this.path
+    })
+    // const menu = {
+    //   path: this.path,
+    //   name: this.name,
+    //   meta: this.meta,
+    //   component: this.component,
+    //   children: this.children
+    // };
+    // let menus: Array<any> = [];
+    // if (this.parent) {
+    //   menus = [...this.parent];
+    // }
+    // const filter = menus.filter(item => {
+    //   return Object.is(item.meta.index, menu.meta.index);
+    // });
+    // if (filter.length === 0) {
+    //   menus.push(menu);
+    // }
+    // let path = "";
+    // if (menus.length > 1) {
+    //   this.parent.forEach((item: any) => {
+    //     path = `${path}/${item.path}`;
+    //   });
+    // }
+    // path = `${path}/${this.path}`;
+    // this.$router.push(path);
   }
   getParentArray(item: MyRouteConfig) {
     const parent = [...this.parent];
