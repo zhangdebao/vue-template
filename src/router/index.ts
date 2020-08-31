@@ -10,6 +10,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: '技术尝试',
       index: '1',
+      role: 'admin'
     },
     component: () => import('../views/Home.vue'),
     children: [
@@ -18,7 +19,8 @@ const routes: Array<RouteConfig> = [
         name: 'Cache',
         meta: {
           title: '缓存机制',
-        index: '1-1',
+          index: '1-1',
+          role: 'admin'
         },
         component: () => import('../views/cache/index.vue'),
         redirect: '/cache/consult',
@@ -29,6 +31,7 @@ const routes: Array<RouteConfig> = [
             meta: {
               title: '协商缓存',
               index: '1-1-1',
+              role: 'admin'
             },
             component: () => import('../views/cache/consult.vue')
           }

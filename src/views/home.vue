@@ -29,7 +29,8 @@
 import LeftMenu from "../components/leftMenus.vue";
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import { namespace } from "vuex-class";
+import { namespace } from "vuex-class"; 
+import { RouteRecord } from 'vue-router'
 const LeftMenuStore = namespace("leftMenu");
 @Component({
   components: {
@@ -38,12 +39,12 @@ const LeftMenuStore = namespace("leftMenu");
 })
 export default class Home extends Vue {
   public menuOpen = false;
-  changeLeftMunus(item: any) {
+  changeLeftMunus(item: any): void {
     this.$router.push({
       path: item.path || "/"
     });
   }
-  get getNav() {
+  get getNav(): Array<RouteRecord> {
     return this.$route.matched;
   }
 }
