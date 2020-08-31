@@ -6,7 +6,6 @@
     </template>
     <my-menu
       v-for="menu of children"
-      :parent="getParentArray(menu)"
       :key="menu.meta.index"
       v-bind="menu"
     />
@@ -17,18 +16,12 @@
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import { MyRouteConfig } from '../types/RouteView'
+import { RouteConfig } from 'vue-router'
 const LeftMenu = namespace("leftMenu");
 @Component({
   name: 'my-menu'
 })
 export default class Menu extends Vue {
-  @Prop({
-    default: () => {
-      return [];
-    }
-  })
-  private parent!: Array<object>;
 
   @Prop({
     default: ""
@@ -67,41 +60,13 @@ export default class Menu extends Vue {
   @LeftMenu.Action("updateActiveIndex") public updateActiveIndex!: Function;
 
   goPath() {
-    this.$router.push({
-      path: this.path
-    })
-    // const menu = {
-    //   path: this.path,
-    //   name: this.name,
-    //   meta: this.meta,
-    //   component: this.component,
-    //   children: this.children
-    // };
-    // let menus: Array<any> = [];
-    // if (this.parent) {
-    //   menus = [...this.parent];
-    // }
-    // const filter = menus.filter(item => {
-    //   return Object.is(item.meta.index, menu.meta.index);
-    // });
-    // if (filter.length === 0) {
-    //   menus.push(menu);
-    // }
-    // let path = "";
-    // if (menus.length > 1) {
-    //   this.parent.forEach((item: any) => {
-    //     path = `${path}/${item.path}`;
-    //   });
-    // }
-    // path = `${path}/${this.path}`;
-    // this.$router.push(path);
-  }
-  getParentArray(item: MyRouteConfig) {
-    const parent = [...this.parent];
-    if (item.children) {
-      parent.push(item);
+    const { name } = this.$router.currentRoute
+    if (Object.is(name, this.name)) {
+      return
     }
-    return parent;
+    this.$router.push({
+      name: this.name
+    })
   }
 }
 </script>

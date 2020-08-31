@@ -8,18 +8,17 @@
     :collapse="menuOpen"
   >
     <template v-for="item of getRoutes">
-      <Menu :key="item.index" v-bind="item"/>
+      <Menu :key="item.index" v-bind="item" />
     </template>
   </el-menu>
 </template>
 <script lang="ts">
-import Menu from './menu.vue'
-import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
-import { namespace } from 'vuex-class'
-import VueRouter, { RouteConfig, RouteRecord } from 'vue-router'
-import { MyRouteConfig } from '../types/RouteView'
-const LeftMenuStore = namespace('leftMenu')
+import Menu from "./menu.vue";
+import Vue from "vue";
+import { Component, Prop } from "vue-property-decorator";
+import { namespace } from "vuex-class";
+import VueRouter, { RouteConfig, RouteRecord } from "vue-router";
+const LeftMenuStore = namespace("leftMenu");
 @Component({
   components: {
     Menu
@@ -28,32 +27,31 @@ const LeftMenuStore = namespace('leftMenu')
 export default class LeftMenu extends Vue {
   @Prop({
     default: false
-  }) public menuOpen !: boolean
+  })
+  public menuOpen!: boolean;
 
-  get getActiveIndex () {
-    const matched: Array<RouteRecord> = this.$route.matched
-    const item: {
-      meta: {
-        index: string
-      }
-    } | undefined = [...matched].pop()
-    return item ? item.meta.index : ''
+  get getActiveIndex() {
+    const matched: Array<RouteRecord> = this.$route.matched;
+    const item:
+      | {
+          meta: {
+            index: string;
+          };
+        }
+      | undefined = [...matched].pop();
+    return item ? item.meta.index : "";
   }
 
-  get getRoutes () {
-    const router: any = this.$router
-    const route = router.options.routes
+  get getRoutes(): Array<RouteConfig> {
+    const router: any = this.$router;
+    const route: Array<RouteConfig> = router.options.routes;
     /* 不使用第一层路由“/” */
-      return [
-        ...route[0].children.map((item: MyRouteConfig) => {
-          // console.log('get getRoutes', item)
-          // item.parent = [
-          //   item
-          // ]
-          return item
-        }),
-        ...route.slice(1)
-      ]
+    const item0 = route[0];
+    let children: Array<RouteConfig> = [];
+    if (route && item0.children && item0.children.length) {
+      children = item0.children;
+    }
+    return [...children, ...route.slice(1)];
   }
 }
 </script>
