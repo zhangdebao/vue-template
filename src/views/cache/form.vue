@@ -7,12 +7,12 @@
     :with-header="false"
     @close="close">
     <h4>创建表单</h4>
-    <el-form ref="form" size="small" :model="form" label-position="left" label-width="80px">
+    <el-form ref="form" size="small" label-position="left" label-width="80px">
       <el-form-item label="名称">
-        <el-input v-model="form.name"></el-input>
+        <el-input v-model="username1"></el-input>
       </el-form-item>
-      <el-form-item label="名称">
-        <Upload v-model="img"/>
+      <el-form-item label="头像">
+        <Upload v-model="avatar"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">立即创建</el-button>
@@ -25,11 +25,8 @@
 import Upload from '../../components/upload.vue'
 import Request from '../../utils/request'
 import Vue from 'vue'
-import { Component, Prop, Emit } from 'vue-property-decorator'
-interface FormInterface {
-  id: number;
-  name: string;
-}
+import { Component, Prop, Emit, Watch } from 'vue-property-decorator'
+import UserInterface from '../../types/user'
 @Component({
   components: {
     Upload
@@ -41,20 +38,28 @@ export default class Form extends Vue {
   }) private drawer!: boolean
 
   @Prop({
-    default: () => {
-      return {
-        id: 0,
-        name: ''
-      }
-    }
-  }) private form!: FormInterface
+    default: 0
+  }) private id?: number
 
-  public img = ''
+  @Prop({
+    default: ''
+  }) private username!: string
+
+  @Prop({
+    default: ''
+  }) private avatar!:string
+
+  @Prop({
+    default: ''
+  }) private password!:string
+
+  protected username1: string = ''
+  protected avatar1: string = ''
+  protected password1: string = ''
 
   onSubmit () {
-    const { form: { name } } = this
-    const promise = Request.post('/course/type', {
-      name
+    const promise = Request.post('/user', {
+      username: this.username1
     })
     promise.then((res: any) => {
       const { code, message } = res
@@ -78,6 +83,13 @@ export default class Form extends Vue {
   close (): void {
     console.log('@Emit')
   }
+
+  @Watch('username')
+  changeUsername1 (val: string) {
+    this.username1 = val
+  }
+
+
 }
 </script>
 <style lang="scss" scoped>

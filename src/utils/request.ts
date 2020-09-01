@@ -10,10 +10,10 @@ const service = axios.create({
 })
 
 service.interceptors.request.use(config => {
-  config.headers.authorization = ''
-  if (store.getters.token) {
-    config.headers['X-Token'] = getToken()
-  }
+  // config.headers.authorization = ''
+  // if (store.getters.token) {
+  //   config.headers['X-Token'] = getToken()
+  // }
   return config
 }, err => {
   return Promise.reject(err)
@@ -45,7 +45,7 @@ service.interceptors.response.use(response => {
     }
     return Promise.reject(new Error(data.message || 'Error'))
   } else {
-    return response
+    return data
   }
 },
 error => {

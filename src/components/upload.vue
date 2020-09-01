@@ -36,10 +36,10 @@ export default class UploadFile extends Vue {
   @Emit('input')
   uploadFile ({ file }: { file: any }) {
     const formData = new FormData()
-    formData.append('name', 'test')
+    formData.append('name', 'file')
     formData.append('file', file)
     return new Promise((resolve, reject) => {
-      const promise = Request.post('/bbs/uploadFile', formData, {
+      const promise = Request.post('/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

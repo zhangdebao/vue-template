@@ -13,19 +13,21 @@
     <el-table :data="showDatas" :max-height="maxHeight">
       <el-table-column prop="id" label="ID">
       </el-table-column>
-      <el-table-column prop="name" label="字符串" >
+      <el-table-column prop="username" label="用户名" >
       </el-table-column>
-      <el-table-column prop="is_show" label="显示" >
+      <el-table-column prop="avatar" label="用户名" >
         <template slot-scope="{ row }">
-          <span>{{row.is_show ? '显示' : '隐藏'}}</span>
+          <img :src="row.avatar"/>
         </template>
+      </el-table-column>
       </el-table-column>
       <el-table-column
       fixed="right"
       label="操作"
       width="100">
       <template slot-scope="scope">
-        <el-button @click="editRowShow(scope.row)" type="text" size="small">{{scope.row.is_show ? '隐藏' : '显示'}}</el-button>
+        <el-button @click="editRowShow(scope.row)" type="text" size="small">修改</el-button>
+        <el-button @click="deleteRow(scope.row)" type="text" size="small">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -40,7 +42,7 @@
         :total="total">
       </el-pagination>
     </div>
-    <Form :drawer="drawer" @close="closeDrawer"/>
+    <Form :drawer="drawer" v-bind="row" @close="closeDrawer"/>
   </div>
 </template>
 <script lang="ts">
@@ -50,6 +52,8 @@ import tableMixin from '../../mixin/table'
 import Request from '../../utils/request'
 import { Component, Watch } from 'vue-property-decorator'
 import { mixins } from 'vue-class-component'
+import UserInterface from '../../types/user'
+import ResultInterface from '../../types/result'
 @Component({
   components: {
     Form
@@ -57,32 +61,33 @@ import { mixins } from 'vue-class-component'
 })
 export default class List extends mixins(formMixin, tableMixin) {
   mounted () {
-    this.getAllTypes()
+    this.getAllUser()
   }
 
-  editRowShow (row: any) {
-    const promise = Request.put('/course/cms/type', {
-      /* eslint-disable-next-line */
-        is_show: !row.is_show,
-      id: row.id
-    })
+  editRowShow (row: UserInterface) {
+    Object.assign(this.row, row)
+    this.drawer = true
+  }
+
+  deleteRow (row: UserInterface) {
+    const promise = Request.delete(`/user/${row.id}`)
     promise.then((res: any) => {
       const { code } = res
       if (Object.is(code, 200)) {
-        this.getAllTypes()
+        this.getAllUser()
       }
     })
   }
 
-  getAllTypes () {
+  getAllUser () {
     const { currentPage, size } = this
-    const url = `/course/cms/type?page=${currentPage}&size=${size}`
+    const url = `/user`
     const promise = Request.get(url)
     promise.then((res: any) => {
-      const { data: { code, detail: { count, list } } } = res
+      const { code, data } = res
       if (Object.is(code, 200)) {
-        this.tableData = list
-        this.total = count
+        this.tableData = data
+        this.total = data.length
         this.filter()
       }
     })
@@ -90,12 +95,12 @@ export default class List extends mixins(formMixin, tableMixin) {
 
   handleSizeChange (val: number) {
     this.size = val
-    this.getAllTypes()
+    this.getAllUser()
   }
 
-  handleCurrentChange (val: any) {
+  handleCurrentChange (val: number) {
     this.currentPage = val
-    this.getAllTypes()
+    this.getAllUser()
   }
 
   filterFun () {
@@ -108,7 +113,7 @@ export default class List extends mixins(formMixin, tableMixin) {
   @Watch('drawer')
   drawerChange (val: boolean) {
     if (!val) {
-      this.getAllTypes()
+      this.getAllUser()
     }
   }
 }
