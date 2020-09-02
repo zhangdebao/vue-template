@@ -33,7 +33,8 @@ export default class TableMixin extends Vue {
   }
 
   @Watch('drawer')
-  drawerChange (val: boolean) {
+  drawerChange(val: boolean) {
+    console.log('drawerChange')
     if (!val) {
       this.row = null
     }

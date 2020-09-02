@@ -11,8 +11,8 @@
       <el-form-item label="名称">
         <el-input v-model="username1"></el-input>
       </el-form-item>
-      <el-form-item label="头像">
-        <Upload v-model="avatar"/>
+      <el-form-item label="密码">
+        <el-input type="password" v-model="password1"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">立即创建</el-button>
@@ -22,15 +22,11 @@
   </el-drawer>
 </template>
 <script lang="ts">
-import Upload from '../../components/upload.vue'
 import Request from '../../utils/request'
 import Vue from 'vue'
 import { Component, Prop, Emit, Watch } from 'vue-property-decorator'
 import UserInterface from '../../types/user'
 @Component({
-  components: {
-    Upload
-  }
 })
 export default class Form extends Vue {
   @Prop({
@@ -58,9 +54,17 @@ export default class Form extends Vue {
   protected password1: string = ''
 
   onSubmit () {
-    const promise = Request.post('/user', {
-      username: this.username1
-    })
+    const { id } = this
+    let promise = null
+    const params:UserInterface  = {
+      username: this.username1,
+      password: this.password1
+    }
+    if (id) {
+      promise = Request.put(`/user/${id}`, params)
+    } else {
+      promise = Request.post('/user', params)
+    }
     promise.then((res: any) => {
       const { code, message } = res
       if (Object.is(code, 200)) {
@@ -87,6 +91,10 @@ export default class Form extends Vue {
   @Watch('username')
   changeUsername1 (val: string) {
     this.username1 = val
+  }
+   @Watch('password')
+  changePassword1 (val: string) {
+    this.password1 = val
   }
 
 

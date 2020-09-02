@@ -15,7 +15,9 @@
       </el-table-column>
       <el-table-column prop="username" label="用户名" >
       </el-table-column>
-      <el-table-column prop="avatar" label="用户名" >
+      <el-table-column prop="password" label="密码" >
+      </el-table-column>
+      <el-table-column prop="avatar" label="头像" >
         <template slot-scope="{ row }">
           <img :src="row.avatar"/>
         </template>
@@ -113,6 +115,7 @@ export default class List extends mixins(formMixin, tableMixin) {
   @Watch('drawer')
   drawerChange (val: boolean) {
     if (!val) {
+      this.row = {}
       this.getAllUser()
     }
   }

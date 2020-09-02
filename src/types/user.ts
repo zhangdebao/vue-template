@@ -1,6 +1,6 @@
 export default interface User { 
   id?: number,
-  username: string,
-  avatar: string,
+  username?: string,
+  avatar?: string,
   password: string
 }
