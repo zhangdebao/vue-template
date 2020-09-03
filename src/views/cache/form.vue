@@ -86,15 +86,22 @@ export default class Form extends Vue {
   @Emit('close')
   close (): void {
     console.log('@Emit')
+    this.username1 = ''
+    this.password1 = ''
+    this.avatar1 = ''
   }
 
   @Watch('username')
   changeUsername1 (val: string) {
     this.username1 = val
   }
-   @Watch('password')
+  @Watch('password')
   changePassword1 (val: string) {
     this.password1 = val
+  }
+  @Watch('avatar')
+  changeAvatar1 (val: string) {
+    this.avatar1 = val
   }
 
 
