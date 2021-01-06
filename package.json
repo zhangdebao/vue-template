@@ -89,7 +89,7 @@
   },
   "dependencies": {
     "@types/js-cookie": "^2.2.6",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "element-ui": "^2.13.2",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
